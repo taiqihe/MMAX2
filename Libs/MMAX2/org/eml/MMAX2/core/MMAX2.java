@@ -2216,7 +2216,7 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
 
     private final void requestSetFontSize(String newFontSize)
     {
-        currentDisplayFontSize = new Integer(newFontSize).intValue();        
+        currentDisplayFontSize = new Integer(newFontSize).intValue();     
         getCurrentDiscourse().getMMAX2().getCurrentDocument().setDisplayFontSize(currentDisplayFontSize);
         requestRefreshDisplay();
     }

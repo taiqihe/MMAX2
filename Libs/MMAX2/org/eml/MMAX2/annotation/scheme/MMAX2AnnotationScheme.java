@@ -123,7 +123,7 @@ public class MMAX2AnnotationScheme implements AnnotationSchemeAPI
         int labelLength = 0;
         Document schemeDOM = parser.getDocument();        
         
-        float fontSize = (float)11.0;
+        float fontSize = 18;
         
         NodeList root = schemeDOM.getElementsByTagName("annotationscheme");
         try

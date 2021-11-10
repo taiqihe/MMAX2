@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Mark-Christoph Müller
+ * Copyright 2007 Mark-Christoph Mï¿½ller
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -330,7 +330,7 @@ public class MMAX2AttributePanelContainer extends javax.swing.JFrame implements 
         // New: Use tab count as index, not componentcount
         levelToIndex.put(levelName,new Integer(tabbedPane.getTabCount()));        
         // New: use addTab, not addComment
-        JScrollPane pane = new JScrollPane(_panel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane pane = new JScrollPane(_panel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                         
         _panel.setScrollPane(pane);
         tabbedPane.addTab(levelName,pane);        
