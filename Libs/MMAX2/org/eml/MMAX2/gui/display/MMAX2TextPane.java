@@ -57,7 +57,7 @@ public class MMAX2TextPane extends JTextPane implements AdjustmentListener, KeyL
     private boolean mouseInPane = true;
     
     private Timer refreshControlTimer = null;
-    // Milliseconds before refreshTimer is stopped after the last scrolling ocurred
+    // Milliseconds before refreshTimer is stopped after the last scrolling occurred
     private int TIME_TO_REFRESH_AFTER_LAST_SCROLLING = 1000;
     private Timer refreshTimer = null;
     // Milliseconds between separate refreshTimer firings
