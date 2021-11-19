@@ -18,6 +18,7 @@ package org.eml.MMAX2.gui.display;
 // XML Parsing
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.text.SimpleAttributeSet;
@@ -460,26 +461,33 @@ public class MarkableLevelRenderer
 
             // Get all MarkablePointerRelations for current markable            
             MarkableRelation[] thisMarkablesMarkablePointerRelations = level.getActiveMarkablePointerRelationsForSourceMarkable(markable);
-            if (thisMarkablesMarkablePointerRelations != null)
-            {
+            if (thisMarkablesMarkablePointerRelations != null && !level.getCurrentDiscourse().getMMAX2().getRenderChains() && thisMarkablesMarkablePointerRelations.length>0) {
                 // The current Markable is the source of a markable pointer relation
                 // Iterate over all MarkablePointerRelations for current Markable
                 // Note: This considers only those relations that are activated by the current markable
                 // being selected. They do not consider other, *permanently* displayed pointers.
-                int flagLevel =0;
                 for (int e=0;e<thisMarkablesMarkablePointerRelations.length;e++)
                 {
                     // Get relation that models the current pointer relation
                     MarkableRelation currentRelation = (MarkableRelation) thisMarkablesMarkablePointerRelations[e];
                     // Get set to display
-                    Renderable currentRenderable = currentRelation.getMarkablePointerForSourceMarkable(markable);
+                    MarkablePointer currentRenderable = currentRelation.getMarkablePointerForSourceMarkable(markable);
                     // Set flagLevel in relation to all relations caused by current attribute being selected
-                    currentRenderable.setFlagLevel(flagLevel);
+                    currentRenderable.incrementFlagLevel();
                     // Increase flaglevel for as many levels as just added renderable has elements
-                    flagLevel += ((MarkablePointer)currentRenderable).getSize();
+                    currentRenderable.setFlagIncrementLevel(currentRenderable.getSize());
                     level.getCurrentDiscourse().getMMAX2().putOnRenderingList((Renderable)currentRenderable);
                 }
-            }                        
+            }
+            else if (level.getCurrentDiscourse().getMMAX2().getRenderChains()){
+                MarkablePointer[] relationsToRender = level.getMarkablePointersForCorefChain(markable);
+                for (int e=0;e<relationsToRender.length;e++){
+                    MarkablePointer currentRenderable = relationsToRender[e];
+                    currentRenderable.incrementFlagLevel();
+                    currentRenderable.setFlagIncrementLevel(currentRenderable.getSize());
+                    level.getCurrentDiscourse().getMMAX2().putOnRenderingList((Renderable)currentRenderable);
+                }
+            }
         }
         else if (mode==MMAX2Constants.RENDER_UNSELECTED) // checked
         {

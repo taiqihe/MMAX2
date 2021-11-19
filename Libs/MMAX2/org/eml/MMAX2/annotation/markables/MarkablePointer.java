@@ -48,6 +48,7 @@ public class MarkablePointer implements Renderable, MarkablePointerAPI
     
     private boolean permanent = false;
     private int flagDisplayLevel=0;
+    private int flagDisplayLevelIncrement=0;
     private float[] dash1;
     private float[] dash2;
     
@@ -501,4 +502,11 @@ public class MarkablePointer implements Renderable, MarkablePointerAPI
         flagDisplayLevel = _level;
     }
     
+    public void setFlagIncrementLevel(int _inc) {
+    	flagDisplayLevelIncrement = _inc;
+    }
+    
+    public void incrementFlagLevel() {
+    	flagDisplayLevel += flagDisplayLevelIncrement;
+    }
 }

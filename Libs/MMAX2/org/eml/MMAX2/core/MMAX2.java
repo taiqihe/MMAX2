@@ -639,7 +639,7 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
     
     public final void emptyRenderingList()
     {
-    	emptyRenderingList(false);
+    	emptyRenderingList(true);
     }
     
     
@@ -1146,7 +1146,7 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
         settingsMenu.setEnabled(true);
         displayMenu.setEnabled(true);
         showMLCPBox.setEnabled(true);
-        showAllArcsBox.setEnabled(true);
+        // showAllArcsBox.setEnabled(true);
         showChainsBox.setEnabled(true);
         currentDiscourse.getCurrentMarkableChart().initializeSaveMenu(saveLevelMenu);        
         
@@ -1165,9 +1165,9 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
                         
         initPluginMenu();
         
-        setVisible(true);        
+        setVisible(true);
         loader = null;
-        System.gc();    
+        System.gc();
     }
     
     private final void initializeUserSwitches(String[] switches)
@@ -1751,15 +1751,15 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
         showMLCPBox.setEnabled(false);
         menu.add(showMLCPBox);
 
-        showAllArcsBox = new JCheckBox("Show All Arcs");
-        showAllArcsBox.setFont(MMAX2.getStandardFont().deriveFont(8));
-        showAllArcsBox.setSelected(false);
-        showAllArcsBox.setActionCommand("show_all_arcs");
-        showAllArcsBox.addActionListener(this);
-        showAllArcsBox.setEnabled(false);
-        menu.add(showAllArcsBox);
+        // showAllArcsBox = new JCheckBox("Show All Arcs");
+        // showAllArcsBox.setFont(MMAX2.getStandardFont().deriveFont(8));
+        // showAllArcsBox.setSelected(false);
+        // showAllArcsBox.setActionCommand("show_all_arcs");
+        // showAllArcsBox.addActionListener(this);
+        // showAllArcsBox.setEnabled(false);
+        // menu.add(showAllArcsBox);
 
-        showChainsBox = new JCheckBox("Show Selected Chains");
+        showChainsBox = new JCheckBox("Show Coreference Chains");
         showChainsBox.setFont(MMAX2.getStandardFont().deriveFont(8));
         showChainsBox.setSelected(false);
         showChainsBox.setActionCommand("show_chains");
@@ -2584,6 +2584,9 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
         return suppressHandlesWhenRendering;
     }
     
+    public final boolean getRenderChains(){
+        return showChainsBox.isSelected();
+    }
     
     public void keyPressed(java.awt.event.KeyEvent keyEvent) 
     {
@@ -2777,13 +2780,13 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
         {
         	String newTime = command.substring(command.indexOf(":")+1);
         	int num = Integer.parseInt(newTime);
-        	requestSetAutoSaveInterval(num);        	
+        	requestSetAutoSaveInterval(num);
         }
-        else if (command.equals("show_all_arcs")) {
-        	
-        }
+        // else if (command.equals("show_all_arcs")) {
+
+        // }
         else if (command.equals("show_chains")) {
-        	
+            requestRefreshDisplay();
         }
     }
     

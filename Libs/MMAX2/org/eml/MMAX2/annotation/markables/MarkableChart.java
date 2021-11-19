@@ -1454,7 +1454,8 @@ public class MarkableChart
         // Get MarkablePointer with source markable        
         MarkablePointer pointer = relation.getMarkablePointerForSourceMarkable(sourceMarkable);
         // Get all targets
-        ArrayList targets = (ArrayList) java.util.Arrays.asList(pointer.getTargetMarkables());
+        ArrayList<Markable> targets = new ArrayList<Markable>();
+        java.util.Collections.addAll(targets, pointer.getTargetMarkables());
         // Iterate over all targets backwards
         for (int z=targets.size()-1;z>=0;z--)
         {
