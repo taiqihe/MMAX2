@@ -1166,10 +1166,16 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
     public final MarkablePointer[] getMarkablePointersForCorefChain(Markable startingpoint){
         // Use union-find to get the coref chain
         HashSet<MarkablePointer> allpointers = new HashSet<MarkablePointer>();
+        HashSet<MarkablePointer> nonunionpointers = new HashSet<MarkablePointer>();
         Iterator allAttributeNames = MarkablePointerRelations.keySet().iterator();
         while (allAttributeNames.hasNext()) {
-            MarkableRelation currentRelation = (MarkableRelation) MarkablePointerRelations.get((String)allAttributeNames.next());
-            java.util.Collections.addAll(allpointers, currentRelation.getMarkablePointers(false));
+        	String attname = (String)allAttributeNames.next();
+        	MarkableRelation currentRelation = (MarkableRelation) MarkablePointerRelations.get(attname);
+        	if (attname.contains("related") || attname.contains("multiple")) {
+        		java.util.Collections.addAll(nonunionpointers, currentRelation.getMarkablePointers(false));
+        	} else {
+        		java.util.Collections.addAll(allpointers, currentRelation.getMarkablePointers(false));
+        	}
         }
         
         // point to index of parent markable (source), root has value of -1
@@ -1229,6 +1235,17 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
                 Markable root = markables.get(rdex);
                 markablerelations.get(root).add(curr);
             }
+        }
+        
+        for (MarkablePointer curr: nonunionpointers) {
+        	curr.setIsPermanent(true);
+            Markable source = curr.getSourceMarkable();
+            if (!markablerelations.containsKey(source)) {
+            	markablerelations.put(source, new HashSet<MarkablePointer>());
+            }
+            markablerelations.get(source).add(curr);
+            markables.add(source);
+            setlookup.put(source, -1);
         }
         
         MarkablePointer[] result = new MarkablePointer[0];
