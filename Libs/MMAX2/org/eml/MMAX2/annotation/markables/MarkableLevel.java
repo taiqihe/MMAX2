@@ -1144,23 +1144,20 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
         return result;
     }
     
-    private int findMarkableInDisjointSets(Markable start, ArrayList<Markable> markables, HashMap<Markable, Integer> setlookup){
+    private Markable findMarkableInDisjointSets(Markable start, HashMap<Markable, Markable> setlookup){
         // helper function to find root element with path compression
         ArrayList<Markable> path = new ArrayList<Markable>();
-        int cdex = setlookup.get(start);
         Markable cm = start;
-        while (cdex!=-1){
+        while (setlookup.get(cm)!=null){
             path.add(cm);
-            cm = markables.get(cdex);
-            cdex = setlookup.get(cm);
+            cm = setlookup.get(cm);
         }
-        cdex = markables.indexOf(cm);
-        if (path.size() > 1){
+        if (path.size() > 0){
             for (Markable m: path){
-                setlookup.put(m, cdex);
+                setlookup.put(m, cm);
             }
         }
-        return cdex;
+        return cm;
     }
 
     public final MarkablePointer[] getMarkablePointersForCorefChain(Markable startingpoint){
@@ -1178,9 +1175,8 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
         	}
         }
         
-        // point to index of parent markable (source), root has value of -1
-        HashMap<Markable, Integer> setlookup = new HashMap<Markable, Integer>();
-        ArrayList<Markable> markables = new ArrayList<Markable>();
+        // point to pointer of parent markable (source), root has value of null
+        HashMap<Markable, Markable> setlookup = new HashMap<Markable, Markable>();
         HashMap<Markable, HashSet<MarkablePointer>> markablerelations = new HashMap<Markable, HashSet<MarkablePointer>>();
         
         for (MarkablePointer curr: allpointers) {
@@ -1205,56 +1201,61 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
             }
 
             if (mergables.size()==0){
-                int ndex = markables.size();
-                markables.add(source);
-                setlookup.put(source, -1);
+                setlookup.put(source, null);
                 for (int i=0;i<targets.length;i++){
-                    markables.add(targets[i]);
-                    setlookup.put(targets[i], ndex);
+                    setlookup.put(targets[i], source);
                 }
                 markablerelations.put(source, new HashSet<MarkablePointer>());
                 markablerelations.get(source).add(curr);
             } else {
-                ArrayList<Integer> roots = new ArrayList<Integer>();
+                ArrayList<Markable> roots = new ArrayList<Markable>();
                 // find root of each mergable
                 for (Markable m: mergables){
-                    roots.add(findMarkableInDisjointSets(m, markables, setlookup));
+                    roots.add(findMarkableInDisjointSets(m, setlookup));
                 }
                 // merge sets and new elements
-                int rdex = roots.get(0);
+                Markable root = roots.get(0);
                 for (int i=1;i<roots.size();i++){
-                    if (roots.get(i) != rdex){
-                        Markable m = markables.get(roots.get(i));
-                        setlookup.put(m, rdex);
+                    Markable m = roots.get(i);
+                    if (m != root){
+                        setlookup.put(m, root);
                     }
                 }
                 for (Markable m:notfounds){
-                    markables.add(m);
-                    setlookup.put(m, rdex);
+                    setlookup.put(m, root);
                 }
-                Markable root = markables.get(rdex);
                 markablerelations.get(root).add(curr);
             }
         }
         
         for (MarkablePointer curr: nonunionpointers) {
-        	curr.setIsPermanent(true);
+            curr.setIsPermanent(true);
             Markable source = curr.getSourceMarkable();
             if (!markablerelations.containsKey(source)) {
-            	markablerelations.put(source, new HashSet<MarkablePointer>());
+                markablerelations.put(source, new HashSet<MarkablePointer>());
+            }
+            if (!setlookup.containsKey(source)) {
+                setlookup.put(source, null);
             }
             markablerelations.get(source).add(curr);
-            markables.add(source);
-            setlookup.put(source, -1);
+
+            // Markable[] targets = curr.getTargetMarkables();
+            // for (int i=0;i<targets.length;i++) {
+            //     if (!markablerelations.containsKey(targets[i])) {
+            //         markablerelations.put(targets[i], new HashSet<MarkablePointer>());
+            //         setlookup.put(targets[i], source);
+            //     }
+            //     markablerelations.get(targets[i]).add(curr);
+            // }
         }
         
         MarkablePointer[] result = new MarkablePointer[0];
         if (setlookup.containsKey(startingpoint)) {
-            int rdex = findMarkableInDisjointSets(startingpoint, markables, setlookup), rd;
+            Markable root = findMarkableInDisjointSets(startingpoint, setlookup), rd;
             HashSet<MarkablePointer> allsets = new HashSet<MarkablePointer>();
-            for (Markable m:markables){
-                rd = findMarkableInDisjointSets(m, markables, setlookup);
-                if (rd == rdex){
+            for (Markable m:setlookup.keySet()){
+                rd = findMarkableInDisjointSets(m, setlookup);
+                if (rd == root){
                     if (markablerelations.containsKey(m)){
                         allsets.addAll(markablerelations.get(m));
                     }
