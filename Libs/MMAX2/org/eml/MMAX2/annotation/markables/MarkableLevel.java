@@ -1168,7 +1168,8 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
         while (allAttributeNames.hasNext()) {
         	String attname = (String)allAttributeNames.next();
         	MarkableRelation currentRelation = (MarkableRelation) MarkablePointerRelations.get(attname);
-        	if (attname.contains("related") || attname.contains("multiple")) {
+        	// Only use some edges to build the coref chains
+        	if (attname.contains("related") || attname.contains("multiple") || attname.contains("_2")) {
         		java.util.Collections.addAll(nonunionpointers, currentRelation.getMarkablePointers(false));
         	} else {
         		java.util.Collections.addAll(allpointers, currentRelation.getMarkablePointers(false));
@@ -1209,7 +1210,7 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
                 markablerelations.get(source).add(curr);
             } else {
                 ArrayList<Markable> roots = new ArrayList<Markable>();
-                // find root of each mergable
+                // find root of each mergeable
                 for (Markable m: mergables){
                     roots.add(findMarkableInDisjointSets(m, setlookup));
                 }
@@ -1228,25 +1229,12 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
             }
         }
         
+        // To render bridging etc.
         for (MarkablePointer curr: nonunionpointers) {
-            curr.setIsPermanent(true);
             Markable source = curr.getSourceMarkable();
-            if (!markablerelations.containsKey(source)) {
-                markablerelations.put(source, new HashSet<MarkablePointer>());
-            }
             if (!setlookup.containsKey(source)) {
                 setlookup.put(source, null);
             }
-            markablerelations.get(source).add(curr);
-
-            // Markable[] targets = curr.getTargetMarkables();
-            // for (int i=0;i<targets.length;i++) {
-            //     if (!markablerelations.containsKey(targets[i])) {
-            //         markablerelations.put(targets[i], new HashSet<MarkablePointer>());
-            //         setlookup.put(targets[i], source);
-            //     }
-            //     markablerelations.get(targets[i]).add(curr);
-            // }
         }
         
         MarkablePointer[] result = new MarkablePointer[0];
@@ -1260,6 +1248,23 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
                         allsets.addAll(markablerelations.get(m));
                     }
                 }
+            }
+            // Add all edges of the markables in the chain
+            for (MarkablePointer rel: nonunionpointers) {
+            	Markable source = rel.getSourceMarkable();
+                Markable[] targets = rel.getTargetMarkables();
+                boolean flag = false;
+                for (int i=0;i<targets.length;i++) {
+                	rd = findMarkableInDisjointSets(targets[i], setlookup);
+                    if (rd == root) {
+                        flag = true;
+                    }
+                }
+                if (flag || findMarkableInDisjointSets(source, setlookup)==root) {
+                	rel.setIsPermanent(true);
+                	allsets.add(rel);
+                }
+            	
             }
             result = (MarkablePointer[])allsets.toArray(new MarkablePointer[0]);
         }
