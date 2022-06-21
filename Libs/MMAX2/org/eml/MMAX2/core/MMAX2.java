@@ -134,7 +134,8 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
     private JMenu toolsMenu = null;
     private JMenu browserMenu = null;
     private JMenu showInPopupMenu = null;
-    private JMenu switchesMenu = null;    
+    private JMenu switchesMenu = null;
+    private JMenu corefChainRelations = null;
         
     private JMenu pluginMenu = null;
     private JMenuItem batchPluginMenuItem = null;
@@ -932,7 +933,8 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
         MarkableLevelControlWindow mlcw = this.getCurrentDiscourse().getCurrentMarkableChart().currentLevelControlWindow;
         mlcw.setVisible(true);
         currentDiscourse.getCurrentMarkableChart().setShowMarkableLevelControlWindow(true);        
-        mlcw.setLocation(getScreenWidth()-mlcw.getWidth(),0);        
+        mlcw.setLocation(getScreenWidth()-mlcw.getWidth(),0);
+        showMLCPBox.setSelected(true);
     }
     
     
@@ -1148,7 +1150,9 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
         showMLCPBox.setEnabled(true);
         // showAllArcsBox.setEnabled(true);
         showChainsBox.setEnabled(true);
-        currentDiscourse.getCurrentMarkableChart().initializeSaveMenu(saveLevelMenu);        
+        corefChainRelations.setEnabled(true);
+        currentDiscourse.getCurrentMarkableChart().initializeSaveMenu(saveLevelMenu);
+        currentDiscourse.getCurrentMarkableChart().initializeCorefMenu(corefChainRelations);
         
         // Added 2021 January 31
         requestSetLineSpacing(selectedLineSpacing+"");
@@ -1474,7 +1478,12 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
            }
             
         });
-        settingsMenu.add(selectAfterCreationMenuItem);        
+        settingsMenu.add(selectAfterCreationMenuItem);
+        
+        corefChainRelations = new JMenu("Relevant relations in coreference chains");
+        corefChainRelations.setFont(MMAX2.getStandardFont());
+        corefChainRelations.setEnabled(false);
+        settingsMenu.add(corefChainRelations);
         
         menu.add(settingsMenu);   
                 

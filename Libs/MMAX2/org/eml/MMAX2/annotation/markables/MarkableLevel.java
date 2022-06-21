@@ -34,6 +34,7 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -118,6 +119,9 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
     private JButton updateCustomization = null;
     private JButton validateButton = null;
     private JButton deleteAllButton = null;
+
+    private ArrayList<JCheckBoxMenuItem> onChainRelButtons;
+    private HashSet<String> onChainRelations;
     
     private JCheckBox switchCustomizations = null;
         
@@ -357,8 +361,7 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
         saveMenuItem.setFont(MMAX2.getStandardFont());
         saveMenuItem.addActionListener(this);
         saveMenuItem.setActionCommand("save_this_level");
-        saveMenuItem.setEnabled(false);               
-        
+        saveMenuItem.setEnabled(false);
     }
     
 /*    
@@ -1144,6 +1147,32 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
         return result;
     }
     
+    public void initOnChainRelationsButtons()
+    {
+    	onChainRelButtons = new ArrayList<JCheckBoxMenuItem>();
+    	onChainRelations = new HashSet<String>();
+    	Iterator allAttributeNames = MarkablePointerRelations.keySet().iterator();
+        while (allAttributeNames.hasNext()) {
+        	String attname = (String)allAttributeNames.next();
+        	JCheckBoxMenuItem ckbx = new JCheckBoxMenuItem(attname);
+        	ckbx.setFont(MMAX2.getStandardFont());
+        	ckbx.addActionListener(this);
+        	ckbx.setActionCommand("update_chain_rels");
+        	ckbx.setEnabled(true);
+        	if (attname.contains("related") || attname.contains("multiple") || attname.contains("_2")) {
+        		ckbx.setSelected(false);
+        	} else {
+        		ckbx.setSelected(true);
+        		onChainRelations.add(attname);
+        	}
+        	onChainRelButtons.add(ckbx);
+        }
+    }
+    
+    public ArrayList<JCheckBoxMenuItem> getOnChainRelationsButtons(){
+    	return onChainRelButtons;
+    }
+    
     private Markable findMarkableInDisjointSets(Markable start, HashMap<Markable, Markable> setlookup){
         // helper function to find root element with path compression
         ArrayList<Markable> path = new ArrayList<Markable>();
@@ -1169,10 +1198,10 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
         	String attname = (String)allAttributeNames.next();
         	MarkableRelation currentRelation = (MarkableRelation) MarkablePointerRelations.get(attname);
         	// Only use some edges to build the coref chains
-        	if (attname.contains("related") || attname.contains("multiple") || attname.contains("_2")) {
-        		java.util.Collections.addAll(nonunionpointers, currentRelation.getMarkablePointers(false));
-        	} else {
+        	if (onChainRelations.contains(attname)) {
         		java.util.Collections.addAll(allpointers, currentRelation.getMarkablePointers(false));
+        	} else {
+        		java.util.Collections.addAll(nonunionpointers, currentRelation.getMarkablePointers(false));
         	}
         }
         
@@ -2358,6 +2387,15 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
             saveMarkables("",false);
             // Remove dirty tag, without browser refresh
             setIsDirty(false,false);
+        }
+        else if (command.equals("update_chain_rels"))
+        {
+        	onChainRelations.clear();
+        	for (JCheckBoxMenuItem ckbx: onChainRelButtons) {
+        		if (ckbx.isSelected()) {
+        			onChainRelations.add(ckbx.getText());
+        		}
+        	}
         }
         else
         {

@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -647,6 +648,24 @@ public class MarkableChart
         {
             currentLevel = (MarkableLevel) orderedLevels[z];
             menu.add(currentLevel.getSaveMarkableLevelItem());
+        }          
+    }
+    
+    public final void initializeCorefMenu(JMenu menu)
+    {
+        menu.removeAll();
+        MarkableLevel currentLevel = null;
+        for (int z=0;z<this.size;z++)
+        {
+            currentLevel = (MarkableLevel) orderedLevels[z];
+            currentLevel.initOnChainRelationsButtons();
+            ArrayList<JCheckBoxMenuItem> relbuttons = currentLevel.getOnChainRelationsButtons();
+            for (JCheckBoxMenuItem b: relbuttons) {
+            	menu.add(b);
+            }
+            if (z<this.size-1) {
+            	menu.addSeparator();
+            }
         }          
     }
     
