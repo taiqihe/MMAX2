@@ -38,7 +38,7 @@ public class MMAX2OneClickAnnotationSelector extends javax.swing.JPopupMenu
         // Get list of values to offer in popup menu
         ArrayList allVals = oneClickAttribute.getOrderedValues();
         // Create dummy menu item with attribute name (for display only)
-        JMenuItem item = new JMenuItem(oneClickAttribute.getDisplayAttributeName());
+        JMenuItem item = new JMenuItem(oneClickAttribute.getDisplayName());
         item.setFont(MMAX2.getStandardFont().deriveFont(Font.BOLD));
         add(item);
         item = null;                                 
