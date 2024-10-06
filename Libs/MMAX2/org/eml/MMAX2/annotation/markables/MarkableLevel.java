@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Mark-Christoph Müller
+ * Copyright 2021 Mark-Christoph MÃ¼ller
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -879,7 +880,7 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
             newRelation = null;
         }
         
-        // Iterate over all MarkablePointerRelations
+        // Iterate over all markablePointerRelations
         allAttributeNames = markablePointerRelations.keySet().iterator();
         while (allAttributeNames.hasNext())
         {
@@ -996,7 +997,7 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
     {
     	onChainRelButtons = new ArrayList<JCheckBoxMenuItem>();
     	onChainRelations = new HashSet<String>();
-    	Iterator allAttributeNames = MarkablePointerRelations.keySet().iterator();
+    	Iterator allAttributeNames = markablePointerRelations.keySet().iterator();
         while (allAttributeNames.hasNext()) {
         	String attname = (String)allAttributeNames.next();
         	JCheckBoxMenuItem ckbx = new JCheckBoxMenuItem(attname);
@@ -1038,10 +1039,10 @@ public class MarkableLevel implements java.awt.event.ActionListener, MarkableLev
         // Use union-find to get the coref chain
         HashSet<MarkablePointer> allpointers = new HashSet<MarkablePointer>();
         HashSet<MarkablePointer> nonunionpointers = new HashSet<MarkablePointer>();
-        Iterator allAttributeNames = MarkablePointerRelations.keySet().iterator();
+        Iterator allAttributeNames = markablePointerRelations.keySet().iterator();
         while (allAttributeNames.hasNext()) {
         	String attname = (String)allAttributeNames.next();
-        	MarkableRelation currentRelation = (MarkableRelation) MarkablePointerRelations.get(attname);
+        	MarkableRelation currentRelation = (MarkableRelation) markablePointerRelations.get(attname);
         	// Only use some edges to build the coref chains
         	if (onChainRelations.contains(attname)) {
         		java.util.Collections.addAll(allpointers, currentRelation.getMarkablePointers(false));

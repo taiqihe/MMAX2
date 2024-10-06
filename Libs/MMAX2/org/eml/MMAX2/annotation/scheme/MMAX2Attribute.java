@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Mark-Christoph Müller
+ * Copyright 2021 Mark-Christoph MÃ¼ller
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -827,15 +827,15 @@ public class MMAX2Attribute extends JPanel implements java.awt.event.ActionListe
 //            {
 //                currentChar = value.substring(z,z+1);
 //                if (currentChar.equals("\"")) currentChar = "'";
-//                else if (currentChar.equals("ä")) currentChar = "ae";
-//                else if (currentChar.equals("ü")) currentChar = "ue";
-//                else if (currentChar.equals("ö")) currentChar = "oe" ;               
-//                else if (currentChar.equals("Ä")) currentChar = "AE";
-//                else if (currentChar.equals("Ü")) currentChar = "UE";
-//                else if (currentChar.equals("Ö")) currentChar = "OE" ;               
+//                else if (currentChar.equals("Ã¤")) currentChar = "ae";
+//                else if (currentChar.equals("Ã¼")) currentChar = "ue";
+//                else if (currentChar.equals("Ã¶")) currentChar = "oe" ;               
+//                else if (currentChar.equals("Ã„")) currentChar = "AE";
+//                else if (currentChar.equals("Ãœ")) currentChar = "UE";
+//                else if (currentChar.equals("Ã–")) currentChar = "OE" ;               
 //                else if (currentChar.equals("<")) currentChar = "";
 //                else if (currentChar.equals(">")) currentChar = "";
-//                else if (currentChar.equals("ß")) currentChar = "ss";
+//                else if (currentChar.equals("ÃŸ")) currentChar = "ss";
 //                else if (currentChar.equals("\n")) currentChar = " ";
 //                
 //                tempresult = tempresult + currentChar;                
