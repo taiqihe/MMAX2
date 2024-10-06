@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Mark-Christoph MÃ¼ller
+ * Copyright 2021 Mark-Christoph Müller
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -368,7 +368,7 @@ public class MMAX2AttributePanel extends JPanel
         // Create empty hashmap to accept attributes to be assigned to markable.Attributes 
         HashMap<String, String> newAttributes = new HashMap<String, String>();
         
-        // Here, Comment=HÃ¼ is still correct
+        // Here, Comment=Hü is still correct
         if (scheme.isDebug()) System.err.println("Before setMarkableAttributes(): "+markable.getAttributes());
         // Create clone of those attributes the markable to be changed currently has, to be able to retain 
         // undefined extra attributes. This will store member and pointer attribs as well!

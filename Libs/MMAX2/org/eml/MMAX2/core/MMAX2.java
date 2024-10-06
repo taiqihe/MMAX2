@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Mark-Christoph MÃ¼ller
+ * Copyright 2021 Mark-Christoph Müller
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2017,7 +2017,7 @@ public class MMAX2 extends javax.swing.JFrame implements KeyListener ,java.awt.e
     private final void requestAboutWindow()
     {
         String message =  "This is version "+versionString+" of MMAX2. ";
-        message = message + "Copyright 2003-2021 Dr. Mark-Christoph MÃ¼ller.\n";
+        message = message + "Copyright 2003-2021 Dr. Mark-Christoph Müller.\n";
         message = message + "MMAX2 has originally been developed at the European Media Lab / EML Research, Heidelberg, Germany.";
         message = message + "\n\nProject home page: http://mmax2.net\n\n";
         message = message + "Contact:             contact@mmax2.net\n\n";
